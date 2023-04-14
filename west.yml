@@ -1,0 +1,72 @@
+
+manifest:
+  # "remotes" is a list of locations where git repositories are cloned
+  # and fetched from.
+  remotes:
+    - name: LairdCP
+      url-base: https://github.com/LairdCP
+
+  # Please add items below based on alphabetical order.
+  projects:
+    # The Laird Connectivity (BL5340PA) fork of the nRF Connect SDK (NCS).
+    - name: sdk-nrf
+      path: nrf
+      revision: bl5340pa-ga1
+      remote: LairdCP
+      import:
+        # Import /nrf/west.yml except for Zephyr which is done below
+        name-blocklist:
+          - zephyr
+
+    # The Laird Connectivity fork of the Zephyr RTOS fork used by NCS
+    - name: sdk-zephyr
+      path: zephyr
+      revision: bl5340pa-ga1
+      remote: LairdCP
+      import:
+        # 
+        # Copied from /nrf/west.yml.
+        #
+        # In addition to the zephyr repository itself, NCS also
+        # imports the contents of zephyr/west.yml.
+        # Only the projects explicitly named in the
+        # following whitelist are imported.
+        #
+        # Note that the zephyr west extensions (like 'build', 'flash',
+        # 'debug', etc.) are automatically provided by this import, so
+        # there's no need to add a redundant west-commands: key for
+        # the zephyr project.
+        #
+        # Please keep this list sorted alphabetically.
+        name-allowlist:
+          - TraceRecorderSource
+          - canopennode
+          - chre
+          - cmsis
+          - edtt
+          - fatfs
+          - hal_nordic
+          - hal_st # required for ST sensors (unrelated to STM32 MCUs)
+          - hal_wurthelektronik
+          - liblc3
+          - libmetal
+          - littlefs
+          - loramac-node
+          - lvgl
+          - lz4
+          - mipi-sys-t
+          - nanopb
+          - net-tools
+          - nrf_hw_models
+          - open-amp
+          - picolibc
+          - psa-arch-tests
+          - segger
+          - tinycbor
+          - tinycrypt
+          - tf-m-tests
+          - uoscore-uedhoc
+          - zcbor
+          - zscilib
+  self:
+    path: bl5340pa_manifest
