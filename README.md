@@ -14,7 +14,7 @@ In-tree Zephyr samples modified by this fork:
 
 > **WARNING:** On Windows do not clone into a starting folder path longer than 12 characters or else the firmware will not build.
 
-This is a Zephyr `west` manifest repository. To learn more about `west` see [here](https://docs.zephyrproject.org/latest/guides/west/index.html).
+This is a Zephyr `west` manifest repository. To learn more about `west` see [here](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.3.0/zephyr/develop/west/index.html#west).
 
 To clone this repository properly use the `west` tool. To install `west` you will first need Python3. It is recommended to use Python virtual environments.
 
