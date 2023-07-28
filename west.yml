@@ -11,7 +11,7 @@ manifest:
     # The Laird Connectivity (BL5340PA) fork of the nRF Connect SDK (NCS).
     - name: sdk-nrf
       path: nrf
-      revision: bl5340pa-ga1
+      revision: bl5340pa-ga1.1
       remote: LairdCP
       import:
         # Import /nrf/west.yml except for Zephyr which is done below
@@ -21,7 +21,7 @@ manifest:
     # The Laird Connectivity fork of the Zephyr RTOS fork used by NCS
     - name: sdk-zephyr
       path: zephyr
-      revision: bl5340pa-ga1
+      revision: bl5340pa-ga1.1
       remote: LairdCP
       import:
         # 
