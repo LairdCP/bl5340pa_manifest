@@ -130,7 +130,7 @@ The antenna type and region can also be specified on the command line or in the 
 Select internal antenna.
 ```
 west build -p -b bl5340pa_dvk_cpuapp -- -Dhci_rpmsg_CONFIG_LCZ_FEM_INTERNAL_ANTENNA=y
-``
+```
 
 Select CE configuration on BL5340PA.
 ```
