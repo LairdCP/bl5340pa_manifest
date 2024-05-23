@@ -1,8 +1,8 @@
 # BL5340PA Manifest
 
-This manifest repository contains the Laird Connectivity fork of the nRF Connect SDK [Version 2.4.1](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.1/nrf/index.html) with support for the [BL5340PA](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bl5340pa-series-long-range-bluetooth-module).
+This manifest repository contains the Ezurio (formerly Laird Connectivity) fork of the nRF Connect SDK [Version 2.6.1](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.6.1/nrf/index.html) with support for the [BL5340PA](https://www.ezurio.com/wireless-modules/bluetooth-modules/bl5340pa-series-long-range-bluetooth-module).
 
-This fork adds support for the BL5340PA DVK board. It also adds a driver for the [nRF21540](https://www.nordicsemi.com/products/nrf21540#:~:text=The%20nRF21540%20is%20a%20'plug,power%20short%2Drange%20wireless%20solutions) Front-End Module  used by the BL5340PA. The driver limits the RF output power based on region and antenna type. **This is required for compliance with regulatory requirements**. The driver also handles errata with the IO of the FEM. The Laird Connectivity driver works alongside the Nordic MPSL FEM driver.
+This fork adds support for the BL5340PA DVK board. It also adds a driver for the [nRF21540](https://www.nordicsemi.com/products/nrf21540#:~:text=The%20nRF21540%20is%20a%20'plug,power%20short%2Drange%20wireless%20solutions) Front-End Module  used by the BL5340PA. The driver limits the RF output power based on region and antenna type. **This is required for compliance with regulatory requirements**. The driver also handles errata with the IO of the FEM. The Ezurio driver works alongside the Nordic MPSL FEM driver.
 
 Out-of-Tree Zephyr sample applications added by this manifest (bl5340pa_samples folder):
 - sleepy advertiser
@@ -24,7 +24,7 @@ The nRF DTM PC application has been forked and rebuilt to reflect the power leve
 
 > **WARNING:** On Windows do not clone into a starting folder path longer than 12 characters or else the firmware will not build.
 
-This is a Zephyr `west` manifest repository. To learn more about `west` see [here](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.1/zephyr/develop/west/index.html#west).
+This is a Zephyr `west` manifest repository. To learn more about `west` see [here](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.6.1/zephyr/develop/west/index.html#west).
 
 To clone this repository properly use the `west` tool. To install `west` you will first need Python3. It is recommended to use Python virtual environments.
 
@@ -45,9 +45,9 @@ west update
 ```
 ## Preparing to Build
 
-If this is your first time working with a Zephyr project on your computer you should follow the [nRF getting started guide](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.1/nrf/getting_started.html) to install all the tools.
+If this is your first time working with a Zephyr project on your computer you should follow the [nRF getting started guide](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.6.1/nrf/getting_started.html) to install all the tools.
 
-v0.16.0 of the Zephyr SDK is recommended for building the firmware.
+v0.16.5-1 of the Zephyr SDK is recommended for building the firmware.
 
 > **WARNING:** Before building the firmware, be sure to install all python dependencies with the following commands:
 
@@ -145,15 +145,15 @@ west build -p -b bl5340pa_dvk_cpuapp -- -Dhci_rpmsg_CONFIG_LCZ_FEM_REGION=2
 
 # Module Integration
 
-After the module has been integrated into a product, further testing may be required. For example, transmitter and receiver spurious emissions and receiver blocking. The DTM firmware can be used in those tests. Contact [Laird Connectivity](https://www.lairdconnect.com/services/emc-testing) for more information on getting your product certified.
+After the module has been integrated into a product, further testing may be required. For example, transmitter and receiver spurious emissions and receiver blocking. The DTM firmware can be used in those tests. Contact [Ezurio](https://www.ezurio.com/services/emc-testing) for more information on getting your product certified.
 
-The DTM firmware for the BL5340PA DVK can be used for preliminary testing, but the DTM application should be built using a board file for the product the module is installed on. Detailed instructions can be found [here](https://www.lairdconnect.com/documentation/application-note-using-the-nordic-nrf-connect-sdk-v2-x-with-visual-studio-code-ide-bl65x-and-bl5340).
+The DTM firmware for the BL5340PA DVK can be used for preliminary testing, but the DTM application should be built using a board file for the product the module is installed on. Detailed instructions can be found [here](https://www.ezurio.com/documentation/application-note-using-the-nordic-nrf-connect-sdk-v2-x-with-visual-studio-code-ide-bl65x-and-bl5340).
 
 ## Regulatory Compliance and Direct Test Mode (DTM)
 
-The BL5340PA module has been [certified](https://www.lairdconnect.com/documentation/regulatory-information-guide-bl5340pa-series) for use in different countries. The [DTM firmware](https://github.com/LairdCP/sdk-nrf/blob/bl5340pa/ncs2.4.1/samples/bluetooth/direct_test_mode/README.rst) was used to determine the maximum power level that the module can transmit at for each channel and frequency. The power levels used can be found in the [datasheet](https://www.lairdconnect.com/documentation/datasheet-bl5340pa-series) and in the [power tables](https://github.com/LairdCP/sdk-nrf/tree/bl5340pa/ncs2.4.1/drivers/lcz_fem/power_table).
+The BL5340PA module has been [certified](https://www.ezurio.com/documentation/regulatory-information-guide-bl5340pa-series) for use in different countries. The [DTM firmware](https://github.com/LairdCP/sdk-nrf/blob/bl5340pa/ncs2.6.1/samples/bluetooth/direct_test_mode/README.rst) was used to determine the maximum power level that the module can transmit at for each channel and frequency. The power levels used can be found in the [datasheet](https://www.ezurio.com/documentation/datasheet-bl5340pa-series) and in the [power tables](https://github.com/LairdCP/sdk-nrf/tree/bl5340pa/ncs2.6.1/drivers/lcz_fem/power_table).
 
-A dedicated hardware tester, [PC application](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-desktop), or terminal program can be used to control the DTM firmware. Testers use a serial protocol described by the Bluetooth specification with some vendor specific commands created by [Nordic](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.1/nrf/samples/bluetooth/direct_test_mode/README.html).
+A dedicated hardware tester, [PC application](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-desktop), or terminal program can be used to control the DTM firmware. Testers use a serial protocol described by the Bluetooth specification with some vendor specific commands created by [Nordic](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.6.1/nrf/samples/bluetooth/direct_test_mode/README.html).
 
 ### CE testing
  
@@ -173,5 +173,5 @@ To lower the output power of the module change CONFIG_BT_CTLR_TX_PWR_ANTENNA=20 
 
 ## Run-time
 
-In the network cpu configuration file set CONFIG_MPSL_FEM_NRF21540_RUNTIME_PA_GAIN_CONTROL=y. The power can then be set from the application using HCI commands. An example function called set_tx_power is provided in the throughput [sample](https://github.com/LairdCP/bl5340pa_samples/blob/main/throughput/src/main.c) which was taken from the HCI power control [example](https://github.com/LairdCP/sdk-zephyr/tree/bl5340pa/ncs2.4.1/samples/bluetooth/hci_pwr_ctrl).
+In the network cpu configuration file set CONFIG_MPSL_FEM_NRF21540_RUNTIME_PA_GAIN_CONTROL=y. The power can then be set from the application using HCI commands. An example function called set_tx_power is provided in the throughput [sample](https://github.com/LairdCP/bl5340pa_samples/blob/main/throughput/src/main.c) which was taken from the HCI power control [example](https://github.com/LairdCP/sdk-zephyr/tree/bl5340pa/ncs2.6.1/samples/bluetooth/hci_pwr_ctrl).
 
