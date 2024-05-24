@@ -94,11 +94,11 @@ jobs:
         with:
           name: ${{env.ARTIFACT_NAME}}
           path:
-            build/**/*.log
-            build/**/autoconf.h
-            build/**/zephyr.hex
-            build/**/merged.hex
-            build/**/merged_domains.hex
-            build/**/*.lst
-            build/**/*.map
-            build/**/*.elf
+            build/*/*.log
+            build/*/autoconf.h
+            build/*/zephyr.hex
+            build/*/merged.hex
+            build/*/merged_domains.hex
+            build/*/*.lst
+            build/*/*.map
+            build/*/*.elf
