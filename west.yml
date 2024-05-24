@@ -10,12 +10,12 @@ manifest:
   projects:
     - name: bl5340pa_samples
       path: bl5340pa_samples
-      revision: bl5340pa-ga3.0
+      revision: workflow
       remote: LairdCP
     # The Laird Connectivity (BL5340PA) fork of the nRF Connect SDK (NCS).
     - name: sdk-nrf
       path: nrf
-      revision: bl5340pa-ga3.0
+      revision: workflow
       remote: LairdCP
       import:
         # Import /nrf/west.yml except for Zephyr which is done below

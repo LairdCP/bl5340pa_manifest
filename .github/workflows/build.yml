@@ -1,0 +1,104 @@
+---
+name: Build Firmware
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  ZEPHYR_SDK_VERSION: 0.16.5-1
+  PROJ_DIR: project
+  BUILD_DIR: build
+  SAMPLES_DIR: bl5340pa_samples
+  DTM_DIR: nrf/samples/bluetooth/direct_test_mode
+  MANIFEST_DIR: bl5340pa_manifest
+  ARTIFACT_NAME: BL5340PA_atifacts
+  DEBUG: false
+
+jobs:
+  firmware:
+    name: Build Firmware
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Initial Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{env.PROJ_DIR}}/${{env.MANIFEST_DIR}}
+      - if: ${{env.DEBUG}}
+        run: |
+            pwd
+            ls -la
+            ls -la ${{env.PROJ_DIR}}
+            ls -la ${{env.PROJ_DIR}}/${{env.MANIFEST_DIR}}
+            cd ~
+            pwd
+      - name: Cache Source Code
+        uses: actions/cache@v4
+        with:
+          path: ${{env.PROJ_DIR}}
+          key: ${{runner.os}}-source-${{hashFiles(format('{0}/{1}/west.yml', env.PROJ_DIR, env.MANIFEST_DIR))}}
+      - name: Cache PIP
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{runner.os}}-pip
+      - name: Install Zephyr Tools
+        run: |
+          sudo apt update
+          sudo apt install --no-install-recommends git cmake ninja-build gperf \
+            ccache dfu-util device-tree-compiler wget \
+            python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
+            make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
+      - name: Install West
+        run: |
+          pip install west
+      - name: Install Zephyr SDK
+        run: |
+          wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${{env.ZEPHYR_SDK_VERSION}}/zephyr-sdk-${{env.ZEPHYR_SDK_VERSION}}_linux-x86_64_minimal.tar.xz
+          tar -xvf zephyr-sdk-${{env.ZEPHYR_SDK_VERSION}}_linux-x86_64_minimal.tar.xz -C /opt
+          /opt/zephyr-sdk-${{env.ZEPHYR_SDK_VERSION}}/setup.sh -h -c -t arm-zephyr-eabi
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{env.PROJ_DIR}}/${{env.MANIFEST_DIR}}
+      - name: Pull Source Code
+        run: |
+          set -x
+          cd ${{env.PROJ_DIR}}
+          rm -rf .west
+          west init -l ${{env.MANIFEST_DIR}}
+          west update -f always
+      - name: Install Python Dependencies
+        run: |
+          set -x
+          cd ${{env.PROJ_DIR}}
+          pip install -r zephyr/scripts/requirements.txt
+          pip install -r nrf/scripts/requirements.txt
+          pip install -r bootloader/mcuboot/scripts/requirements.txt
+      - name: Build Firmware
+        run: |
+          set -x
+          rm -rf ${{env.BUILD_DIR}}
+          cd ${{env.PROJ_DIR}}
+          west twister -O ../${{env.BUILD_DIR}} -T ${{env.SAMPLES_DIR}} --no-clean --overflow-as-errors --exclude-tag should_fail
+          west twister -O ../${{env.BUILD_DIR}} -T ${{env.DTM_DIR}} --no-clean --overflow-as-errors --exclude-tag should_fail
+      - if: ${{env.DEBUG}}
+        run: |
+          pwd
+          ls -la
+          ls -la ${{env.PROJ_DIR}}
+          ls -la ${{env.BUILD_DIR}}
+      - name: Store Artifacts
+        # always run this step to store build logs for debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{env.ARTIFACT_NAME}}
+          path:
+            build/*/*.log
+            build/*/autoconf.h
+            build/*/zephyr.hex
+            build/*/merged.hex
+            build/*/merged_domains.hex
+            build/*/*.lst
+            build/*/*.map
+            build/*/*.elf
