@@ -11,8 +11,8 @@ env:
   SAMPLES_DIR: bl5340pa_samples
   DTM_DIR: nrf/samples/bluetooth/direct_test_mode
   MANIFEST_DIR: bl5340pa_manifest
-  ARTIFACT_NAME: BL5340PA_samples
-  DEBUG: true
+  ARTIFACT_NAME: BL5340PA_atifacts
+  DEBUG: false
 
 jobs:
   firmware:
@@ -29,6 +29,8 @@ jobs:
             ls -la
             ls -la ${{env.PROJ_DIR}}
             ls -la ${{env.PROJ_DIR}}/${{env.MANIFEST_DIR}}
+            cd ~
+            pwd
       - name: Cache Source Code
         uses: actions/cache@v4
         with:
@@ -75,31 +77,28 @@ jobs:
       - name: Build Firmware
         run: |
           set -x
+          rm -rf ${{env.BUILD_DIR}}
           cd ${{env.PROJ_DIR}}
-          west twister -T ${{env.SAMPLES_DIR}} -c --overflow-as-errors --exclude-tag should_fail
-          west twister -T ${{env.DTM_DIR}} -c --overflow-as-errors --exclude-tag should_fail
+          west twister -O ../${{env.BUILD_DIR}} -T ${{env.SAMPLES_DIR}} --no-clean --overflow-as-errors --exclude-tag should_fail
+          west twister -O ../${{env.BUILD_DIR}} -T ${{env.DTM_DIR}} --no-clean --overflow-as-errors --exclude-tag should_fail
       - if: ${{env.DEBUG}}
         run: |
           pwd
           ls -la
           ls -la ${{env.PROJ_DIR}}
-          ls -la ${{env.SAMPLES_DIR}}
-          ls -la ${{env.SAMPLES_DIR}}/twister-out
-          ls -la ${{env.DTM_DIR}}
-          ls -la ${{env.DTM_DIR}}/twister-out
+          ls -la ${{env.BUILD_DIR}}
       - name: Store Artifacts
         # always run this step to store build logs for debugging
-        if: false
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.ARTIFACT_NAME}}
-          if-no-files-found: error
           path:
-            ${{env.BUILD_DIR}}/**/*.log
-            ${{env.BUILD_DIR}}/**/autoconf.h
-            ${{env.BUILD_DIR}}/**/zephyr.hex
-            ${{env.BUILD_DIR}}/**/merged.hex
-            ${{env.BUILD_DIR}}/**/merged_domains.hex
-            ${{env.BUILD_DIR}}/**/*.lst
-            ${{env.BUILD_DIR}}/**/*.map
-            ${{env.BUILD_DIR}}/**/*.elf
+            build/**/*.log
+            build/**/autoconf.h
+            build/**/zephyr.hex
+            build/**/merged.hex
+            build/**/merged_domains.hex
+            build/**/*.lst
+            build/**/*.map
+            build/**/*.elf
