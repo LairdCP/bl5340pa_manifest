@@ -10,22 +10,22 @@ manifest:
   projects:
     - name: bl5340pa_samples
       path: bl5340pa_samples
-      revision: bl5340pa-ga3.0
+      revision: bl5340pa-ga4.0
       remote: LairdCP
-    # The Laird Connectivity (BL5340PA) fork of the nRF Connect SDK (NCS).
+    # The Ezurio (BL5340PA) fork of the nRF Connect SDK (NCS).
     - name: sdk-nrf
       path: nrf
-      revision: bl5340pa-ga3.0
+      revision: bl5340pa-ga4.0
       remote: LairdCP
       import:
         # Import /nrf/west.yml except for Zephyr which is done below
         name-blocklist:
           - zephyr
 
-    # The Laird Connectivity fork of the Zephyr RTOS fork used by NCS
+    # The Ezurio fork of the Zephyr RTOS fork used by NCS
     - name: sdk-zephyr
       path: zephyr
-      revision: bl5340pa-ga3.0
+      revision: bl5340pa-ga4.0
       remote: LairdCP
       import:
         # 
@@ -64,9 +64,7 @@ manifest:
           - nrf_hw_models
           - open-amp
           - picolibc
-          - psa-arch-tests
           - segger
-          - tinycbor
           - tinycrypt
           - tf-m-tests
           - uoscore-uedhoc
